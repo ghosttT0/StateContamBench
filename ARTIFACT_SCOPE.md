@@ -6,6 +6,8 @@
 - Carrier-index contamination indicators and model reasons in attacked rows.
 - Qwen3 None/G3/TAME and component-ablation descriptive comparisons.
 - Qwen2.5 None/G3/TAME, clean-capability, and component-ablation screens.
+- Six-family cross-model attacked screens, including unknown-aware denominators
+  for Claude-Sonnet-5, GLM-5.2, and DeepSeek-V4-Pro.
 - Historical all-carrier, payload-sensitivity, task-sensitivity,
   trigger-distance, surface-variant, write-path, and cross-model screens.
 - Every value regenerated in `PAPER_EVIDENCE_REPORT.md` and
@@ -21,6 +23,8 @@
 - Exact method-effect significance for old separate-process runs: their source
   streams were not fingerprinted and the old synthetic RNG was not frozen.
 - Provider-wide or deployment-wide generalization from the cross-model screen.
+- Direct ranking of unknown-bearing models against zero-unknown models; their
+  valid-output DASR is conditional on W4 coverage.
 - Any aggregate from `results/quarantined/guard_real8_items.jsonl`, whose 480
   rows collapse to 208 duplicate sequence-carrier keys.
 

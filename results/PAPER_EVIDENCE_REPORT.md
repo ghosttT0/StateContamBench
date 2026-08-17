@@ -33,22 +33,48 @@ frozen rows support raw rates and key-aligned diagnostics, but PDCR is unavailab
 
 | Slice | Rows | Any-window unknown | W4 unknown | Paper status |
 |---|---:|---:|---:|---|
-| GPT-5.4-syn-none | 96 | 0 | 0 | included as raw screen |
-| GPT-5.4-syn-tame | 96 | 0 | 0 | included as raw screen |
-| GPT-5.4-real-none | 104 | 0 | 0 | included as raw screen |
-| GPT-5.4-real-tame | 104 | 0 | 0 | included as raw screen |
-| Claude-Sonnet-5-syn-none | 96 | 2 | 1 | excluded with run family |
-| Claude-Sonnet-5-syn-tame | 96 | 0 | 0 | excluded with run family |
-| Claude-Sonnet-5-real-none | 104 | 0 | 0 | excluded with run family |
-| Claude-Sonnet-5-real-tame | 104 | 1 | 0 | excluded with run family |
-| GLM-5.2-syn-none | 96 | 27 | 8 | excluded with run family |
-| GLM-5.2-syn-tame | 96 | 32 | 12 | excluded with run family |
-| GLM-5.2-real-none | 104 | 41 | 30 | excluded with run family |
-| GLM-5.2-real-tame | 104 | 15 | 7 | excluded with run family |
+| GPT-5.4-syn-none | 96 | 0 | 0 | all W4 outputs known |
+| GPT-5.4-syn-tame | 96 | 0 | 0 | all W4 outputs known |
+| GPT-5.4-real-none | 104 | 0 | 0 | all W4 outputs known |
+| GPT-5.4-real-tame | 104 | 0 | 0 | all W4 outputs known |
+| DeepSeek-V4-Pro-syn-none | 96 | 59 | 40 | valid-output score + U/N |
+| DeepSeek-V4-Pro-syn-tame | 96 | 38 | 27 | valid-output score + U/N |
+| DeepSeek-V4-Pro-real-none | 104 | 81 | 66 | valid-output score + U/N |
+| DeepSeek-V4-Pro-real-tame | 104 | 73 | 46 | valid-output score + U/N |
+| Claude-Sonnet-5-syn-none | 96 | 2 | 1 | valid-output score + U/N |
+| Claude-Sonnet-5-syn-tame | 96 | 0 | 0 | all W4 outputs known |
+| Claude-Sonnet-5-real-none | 104 | 0 | 0 | all W4 outputs known |
+| Claude-Sonnet-5-real-tame | 104 | 1 | 0 | all W4 outputs known |
+| GLM-5.2-syn-none | 96 | 27 | 8 | valid-output score + U/N |
+| GLM-5.2-syn-tame | 96 | 32 | 12 | valid-output score + U/N |
+| GLM-5.2-real-none | 104 | 41 | 30 | valid-output score + U/N |
+| GLM-5.2-real-tame | 104 | 15 | 7 | valid-output score + U/N |
 
-The gate is applied to each analyzer's complete four-slice run family. A clean 
-slice is not selectively retained when another slice from the same family has 
-unknown verdicts.
+Unknown outputs are retained and reported rather than silently counted as
+non-attacks. The valid-output score is conditional on a known W4 verdict; U/N
+makes its denominator visible. The all-N lower bound retains the historical
+convention of placing unknown rows in the denominator.
+
+## Cross-Model Scores With Unknown-Aware Denominators
+
+| Model | Dataset | Carrier | None valid DASR | None U/N | None all-N LB | TAME valid DASR | TAME U/N | TAME all-N LB |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| GPT-5.4 | Synthetic-48 | S1 History | 62.5% | 0/48 | 62.5% | 35.4% | 0/48 | 35.4% |
+| GPT-5.4 | Synthetic-48 | S3 Retrieval | 58.3% | 0/48 | 58.3% | 35.4% | 0/48 | 35.4% |
+| GPT-5.4 | Real-52 | S1 History | 76.9% | 0/52 | 76.9% | 71.2% | 0/52 | 71.2% |
+| GPT-5.4 | Real-52 | S3 Retrieval | 82.7% | 0/52 | 82.7% | 61.5% | 0/52 | 61.5% |
+| DeepSeek-V4-Pro | Synthetic-48 | S1 History | 11.1% | 21/48 | 6.2% | 0.0% | 16/48 | 0.0% |
+| DeepSeek-V4-Pro | Synthetic-48 | S3 Retrieval | 6.9% | 19/48 | 4.2% | 0.0% | 11/48 | 0.0% |
+| DeepSeek-V4-Pro | Real-52 | S1 History | 16.7% | 40/52 | 3.8% | 16.7% | 22/52 | 9.6% |
+| DeepSeek-V4-Pro | Real-52 | S3 Retrieval | 61.5% | 26/52 | 30.8% | 17.9% | 24/52 | 9.6% |
+| Claude-Sonnet-5 | Synthetic-48 | S1 History | 27.1% | 0/48 | 27.1% | 20.8% | 0/48 | 20.8% |
+| Claude-Sonnet-5 | Synthetic-48 | S3 Retrieval | 21.3% | 1/48 | 20.8% | 29.2% | 0/48 | 29.2% |
+| Claude-Sonnet-5 | Real-52 | S1 History | 38.5% | 0/52 | 38.5% | 40.4% | 0/52 | 40.4% |
+| Claude-Sonnet-5 | Real-52 | S3 Retrieval | 48.1% | 0/52 | 48.1% | 40.4% | 0/52 | 40.4% |
+| GLM-5.2 | Synthetic-48 | S1 History | 4.3% | 2/48 | 4.2% | 7.0% | 5/48 | 6.2% |
+| GLM-5.2 | Synthetic-48 | S3 Retrieval | 16.7% | 6/48 | 14.6% | 0.0% | 7/48 | 0.0% |
+| GLM-5.2 | Real-52 | S1 History | 25.6% | 13/52 | 19.2% | 22.9% | 4/52 | 21.2% |
+| GLM-5.2 | Real-52 | S3 Retrieval | 31.4% | 17/52 | 21.2% | 20.4% | 3/52 | 19.2% |
 
 ## Qwen3 Raw Attacked Error
 

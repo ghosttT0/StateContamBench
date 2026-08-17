@@ -32,10 +32,31 @@ FILES = {
     "ablate_cache": ("qwen3_tame_ablate_no_cache_items.jsonl", 96),
 }
 
-CROSS_MODEL = {
-    "GPT-5.4": "gpt54",
-    "Claude-Sonnet-5": "claude5",
-    "GLM-5.2": "glm52",
+CROSS_MODEL_FILES = {
+    "GPT-5.4": {
+        ("syn", "none"): "gpt54_syn_none_items.jsonl",
+        ("syn", "tame"): "gpt54_syn_tame_items.jsonl",
+        ("real", "none"): "gpt54_real_none_items.jsonl",
+        ("real", "tame"): "gpt54_real_tame_items.jsonl",
+    },
+    "DeepSeek-V4-Pro": {
+        ("syn", "none"): "v4pro_syn_none_cleanrun_items.jsonl",
+        ("syn", "tame"): "v4pro_syn_tame_cleanrun_items.jsonl",
+        ("real", "none"): "v4pro_real_none_cleanrun_items.jsonl",
+        ("real", "tame"): "v4pro_real_tame_cleanrun_items.jsonl",
+    },
+    "Claude-Sonnet-5": {
+        ("syn", "none"): "claude5_syn_none_items.jsonl",
+        ("syn", "tame"): "claude5_syn_tame_items.jsonl",
+        ("real", "none"): "claude5_real_none_items.jsonl",
+        ("real", "tame"): "claude5_real_tame_items.jsonl",
+    },
+    "GLM-5.2": {
+        ("syn", "none"): "glm52_syn_none_items.jsonl",
+        ("syn", "tame"): "glm52_syn_tame_items.jsonl",
+        ("real", "none"): "glm52_real_none_items.jsonl",
+        ("real", "tame"): "glm52_real_tame_items.jsonl",
+    },
 }
 
 
@@ -72,6 +93,18 @@ def clean_acc(rows: list[dict], mode: str) -> float:
 
 def pct(value: float) -> str:
     return f"{100 * value:.1f}"
+
+
+def unknown_aware_dasr(rows: list[dict], mode: str) -> dict:
+    selected = mode_rows(rows, mode)
+    valid = [row for row in selected if row.get("w4_verdict") != "unknown"]
+    assert valid, f"{mode}: no valid W4 outputs"
+    return {
+        "valid_rate": sum(float(row["DASR"]) for row in valid) / len(valid),
+        "all_n_lower_bound": sum(float(row["DASR"]) for row in selected) / len(selected),
+        "unknown": len(selected) - len(valid),
+        "total": len(selected),
+    }
 
 
 def validate_rows(name: str, rows: list[dict], expected: int,
@@ -168,7 +201,8 @@ def write_synthetic_manifest() -> None:
                 handle.write(json.dumps(record, sort_keys=True) + "\n")
 
 
-def write_report(data: dict[str, list[dict]], checks: dict) -> None:
+def write_report(data: dict[str, list[dict]], checks: dict,
+                 cross_data: dict[tuple[str, str, str], list[dict]]) -> None:
     lines = [
         "# Audited Paper Evidence Report",
         "",
@@ -200,25 +234,13 @@ def write_report(data: dict[str, list[dict]], checks: dict) -> None:
         "| Slice | Rows | Any-window unknown | W4 unknown | Paper status |",
         "|---|---:|---:|---:|---|",
     ]
-    family_unknown = {
-        family: sum(
-            item["unknown_rows"]
-            for name, item in checks.items()
-            if name.startswith(f"exploratory-{family}-")
-        )
-        for family in CROSS_MODEL
-    }
     for name, item in checks.items():
         if not name.startswith("exploratory-"):
             continue
-        family = next(
-            family for family in CROSS_MODEL
-            if name.startswith(f"exploratory-{family}-")
-        )
         status = (
-            "included as raw screen"
-            if family_unknown[family] == 0
-            else "excluded with run family"
+            "all W4 outputs known"
+            if item["w4_unknown_rows"] == 0
+            else "valid-output score + U/N"
         )
         lines.append(
             f"| {name.removeprefix('exploratory-')} | {item['rows']} | "
@@ -227,10 +249,27 @@ def write_report(data: dict[str, list[dict]], checks: dict) -> None:
 
     lines += [
         "",
-        "The gate is applied to each analyzer's complete four-slice run family. A clean ",
-        "slice is not selectively retained when another slice from the same family has ",
-        "unknown verdicts.",
+        "Unknown outputs are retained and reported rather than silently counted as",
+        "non-attacks. The valid-output score is conditional on a known W4 verdict; U/N",
+        "makes its denominator visible. The all-N lower bound retains the historical",
+        "convention of placing unknown rows in the denominator.",
+        "",
+        "## Cross-Model Scores With Unknown-Aware Denominators",
+        "",
+        "| Model | Dataset | Carrier | None valid DASR | None U/N | None all-N LB | TAME valid DASR | TAME U/N | TAME all-N LB |",
+        "|---|---|---|---:|---:|---:|---:|---:|---:|",
     ]
+    for model in CROSS_MODEL_FILES:
+        for dataset, dataset_label in (("syn", "Synthetic-48"), ("real", "Real-52")):
+            for mode, carrier in (("S1", "History"), ("S3", "Retrieval")):
+                none = unknown_aware_dasr(cross_data[(model, dataset, "none")], mode)
+                tame = unknown_aware_dasr(cross_data[(model, dataset, "tame")], mode)
+                lines.append(
+                    f"| {model} | {dataset_label} | {mode} {carrier} | "
+                    f"{pct(none['valid_rate'])}% | {none['unknown']}/{none['total']} | "
+                    f"{pct(none['all_n_lower_bound'])}% | {pct(tame['valid_rate'])}% | "
+                    f"{tame['unknown']}/{tame['total']} | {pct(tame['all_n_lower_bound'])}% |"
+                )
 
     lines += [
         "",
@@ -317,6 +356,8 @@ def write_artifact_manifest(checks: dict) -> None:
     for path in sorted(ROOT.rglob("*")):
         if not path.is_file() or path == manifest_path:
             continue
+        if "__pycache__" in path.parts or path.suffix == ".pyc":
+            continue
         files.append({
             "path": path.relative_to(ROOT).as_posix(),
             "bytes": path.stat().st_size,
@@ -342,21 +383,23 @@ def main() -> None:
         data[name] = rows
         checks[name] = validate_rows(name, rows, expected)
 
-    for label, stem in CROSS_MODEL.items():
+    cross_data = {}
+    for label, files in CROSS_MODEL_FILES.items():
         for dataset in ("syn", "real"):
             for method in ("none", "tame"):
-                path = RESULTS / f"{stem}_{dataset}_{method}_items.jsonl"
+                path = RESULTS / files[(dataset, method)]
                 rows = load_jsonl(path)
                 expected = 96 if dataset == "syn" else 104
                 key = f"exploratory-{label}-{dataset}-{method}"
                 checks[key] = validate_rows(key, rows, expected, allow_unknown=True)
+                cross_data[(label, dataset, method)] = rows
 
     from supplemental_report import generate_supplemental_report
 
     checks.update(generate_supplemental_report())
 
     write_synthetic_manifest()
-    write_report(data, checks)
+    write_report(data, checks, cross_data)
     write_artifact_manifest(checks)
     print("artifact validation OK")
     print(f"report: {RESULTS / 'PAPER_EVIDENCE_REPORT.md'}")

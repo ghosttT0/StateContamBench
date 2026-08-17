@@ -1,10 +1,17 @@
 # StateContamBench Anonymous Review Artifact
 
+Anonymous review mirror:
+<https://anonymous.4open.science/r/StateContamBench-8D36/>
+
 This artifact accompanies the submission on delayed state contamination in
 LLM-based security-log analysis. It contains the benchmark implementation,
 frozen result rows used by the paper and its supplemental screens, a Qwen3-14B
 execution recipe, source data for the paper figures, and integrity checks that
 recompute the reported values.
+
+The cross-model screen retains all six analyzer families. For runs with unknown
+W4 outputs, it reports valid-output DASR together with `U/N` and an all-N lower
+bound; unknown responses are never silently counted as non-attacks.
 
 ## Important Evidence Status
 
