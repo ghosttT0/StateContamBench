@@ -1,0 +1,28 @@
+Sanitized configuration extract from the frozen Qwen3 server log.
+Local absolute paths, process identifiers, timestamps, and terminal escapes removed.
+
+vLLM version: 0.10.2
+served_model_name: Qwen3-14B
+model: ${MODEL_PATH}
+tokenizer: ${MODEL_PATH}
+dtype: torch.bfloat16
+max_seq_len: 16384
+quantization: fp8
+tensor_parallel_size: 1
+pipeline_parallel_size: 1
+data_parallel_size: 1
+enable_prefix_caching: true
+chunked_prefill_enabled: true
+
+Client-side request settings recorded by loginject/llm.py:
+temperature: 0.0
+seed: 7
+max_tokens: 2048
+
+Chat template:
+experiments/qwen3_no_thinking.jinja
+
+Original warning retained in substance:
+The supplied no-thinking template differs from the model's official chat
+template and may change model performance. Results apply to this frozen
+configuration and should not be generalized to the official template.

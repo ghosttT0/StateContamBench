@@ -1,0 +1,2 @@
+# Install in a CUDA/PyTorch environment compatible with the target GPU.
+vllm==0.10.2

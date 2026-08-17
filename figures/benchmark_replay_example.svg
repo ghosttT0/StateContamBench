@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="201.33pt" height="200.124pt" viewBox="0 0 201.33 200.124" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-08-17T23:08:13.535790</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 200.124 
+L 201.33 200.124 
+L 201.33 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 15.79878 63.288648 
+L 185.53122 63.288648 
+Q 188.89596 63.288648 188.89596 59.945616 
+L 188.89596 25.029504 
+Q 188.89596 21.686472 185.53122 21.686472 
+L 15.79878 21.686472 
+Q 12.43404 21.686472 12.43404 25.029504 
+L 12.43404 59.945616 
+Q 12.43404 63.288648 15.79878 63.288648 
+z
+" style="fill: #dceaf5; stroke: #47789d; stroke-width: 1.25; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 100.665 65.848837 
+Q 100.665 70.811813 100.665 74.48905 
+" clip-path="url(#pc5580caf57)" style="fill: none; stroke: #52616b; stroke-width: 1.15; stroke-linecap: round"/>
+    <path d="M 102.865 70.08905 
+L 100.665 74.48905 
+L 98.465 70.08905 
+z
+" clip-path="url(#pc5580caf57)" style="fill: #52616b; stroke: #52616b; stroke-width: 1.15; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 15.79878 120.863088 
+L 185.53122 120.863088 
+Q 188.89596 120.863088 188.89596 117.520056 
+L 188.89596 93.747384 
+Q 188.89596 90.404352 185.53122 90.404352 
+L 15.79878 90.404352 
+Q 12.43404 90.404352 12.43404 93.747384 
+L 12.43404 117.520056 
+Q 12.43404 120.863088 15.79878 120.863088 
+z
+" style="fill: #f8e8c8; stroke: #b6842e; stroke-width: 1.25; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 100.665 122.491256 
+Q 100.665 125.132999 100.665 126.489002 
+" clip-path="url(#pc5580caf57)" style="fill: none; stroke: #52616b; stroke-width: 1.15; stroke-linecap: round"/>
+    <path d="M 102.865 122.089002 
+L 100.665 126.489002 
+L 98.465 122.089002 
+z
+" clip-path="url(#pc5580caf57)" style="fill: #52616b; stroke: #52616b; stroke-width: 1.15; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 15.79878 192.366828 
+L 185.53122 192.366828 
+Q 188.89596 192.366828 188.89596 189.023796 
+L 188.89596 146.678724 
+Q 188.89596 143.335692 185.53122 143.335692 
+L 15.79878 143.335692 
+Q 12.43404 143.335692 12.43404 146.678724 
+L 12.43404 189.023796 
+Q 12.43404 192.366828 15.79878 192.366828 
+z
+" style="fill: #f7dddc; stroke: #a94442; stroke-width: 1.25; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 8.1px; font-family: 'Arial', 'DejaVu Sans', 'Liberation Sans', sans-serif; text-anchor: start; fill: #1f2933" x="14.6772" y="17.673576" transform="rotate(-0 14.6772 17.673576)">Persistent context at W4</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 37.475802)">retrieval index contains W1 record</text>
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 45.237726)">exact W4 top-3 hits were not stored</text>
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 52.99965)">index_contaminated = 1</text>
+   </g>
+   <g id="text_3">
+    <g id="patch_7">
+     <path d="M 105.9009 74.017517 
+L 127.317056 74.017517 
+L 127.317056 67.603423 
+L 105.9009 67.603423 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <text style="font-size: 6.2px; font-family: 'Arial', 'DejaVu Sans', 'Liberation Sans', sans-serif; text-anchor: start; fill: #52616b" x="106.2729" y="72.413267" transform="rotate(-0 106.2729 72.413267)">retrieve</text>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 8.1px; font-family: 'Arial', 'DejaVu Sans', 'Liberation Sans', sans-serif; text-anchor: start; fill: #1f2933" x="14.6772" y="86.285143" transform="rotate(-0 14.6772 86.285143)">Current query</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 106.193682)">Does any log in this window</text>
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 114.002356)">indicate malicious activity?</text>
+   </g>
+   <g id="text_6">
+    <g id="patch_8">
+     <path d="M 105.9009 128.341787 
+L 124.913588 128.341787 
+L 124.913588 121.927693 
+L 105.9009 121.927693 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <text style="font-size: 6.2px; font-family: 'Arial', 'DejaVu Sans', 'Liberation Sans', sans-serif; text-anchor: start; fill: #52616b" x="106.2729" y="126.737537" transform="rotate(-0 106.2729 126.737537)">decide</text>
+   </g>
+   <g id="text_7">
+    <text style="font-weight: 700; font-size: 8.1px; font-family: 'Arial', 'DejaVu Sans', 'Liberation Sans', sans-serif; text-anchor: start; fill: #1f2933" x="14.6772" y="139.322796" transform="rotate(-0 14.6772 139.322796)">Observed W4 error</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 158.665929)">ground truth = malicious</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 165.785602)">model verdict = benign</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 172.905275)">DASR = 1</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 179.982323)">reason: "SYN packets may indicate a port</text>
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Computer Modern Typewriter', 'Andale Mono', 'Nimbus Mono L', 'Courier New', 'Courier', 'Fixed', 'Terminal', monospace; fill: #1f2933" transform="translate(21.21975 187.059371)">scan, but ... previously approved ..."</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pc5580caf57">
+   <rect x="7.2" y="7.2" width="186.93" height="185.724"/>
+  </clipPath>
+ </defs>
+</svg>
