@@ -212,7 +212,7 @@ Qwen3-14B is the primary open-weight analyzer~\cite{qwen3_2025}. We serve the lo
 
 \subsection{Metrics}
 
-The artifact calls its raw outcome delayed attack success rate (DASR). Operationally, this is an \emph{attack-direction error rate}: the fraction of trigger decisions that match the attacker's false-negative or false-positive objective. Raw DASR mixes contamination with errors that occur on a payload-free stream. Our causal outcome is the paired delayed-contamination rate (PDCR), the fraction of byte-matched attacked/control pairs for which the control is correct, the attacked decision moves in the attacker's direction, and the W4 trace establishes payload-derived replay. In corrected runs, S1 and S3 require \texttt{w4\_replayed\_injected\_verbatim=1} for verbatim persistence; transformed carriers require an auditable semantic link. The legacy \texttt{retrieved\_contaminated} field only tests whether the final index contains bias tokens and cannot satisfy this condition. For historical unpaired profiles, S0 and clean accuracy remain descriptive references.
+The artifact calls its raw outcome delayed attack success rate (DASR). Operationally, this is an \emph{attack-direction error rate}: the fraction of trigger decisions that match the attacker's false-negative or false-positive objective. We also split DASR by objective. FN DASR measures attacked malicious triggers that fail to receive a \texttt{malicious} verdict, while FP DASR measures attacked benign triggers labeled \texttt{malicious}. Across all four windows, the benign-to-malicious rate (BMR) is the corresponding false-alarm rate and the malicious-trigger miss rate (MTR) counts malicious windows not labeled \texttt{malicious}. Raw DASR mixes contamination with errors that occur on a payload-free stream. Our causal outcome is the paired delayed-contamination rate (PDCR), the fraction of byte-matched attacked/control pairs for which the control is correct, the attacked decision moves in the attacker's direction, and the W4 trace establishes payload-derived replay. In corrected runs, S1 and S3 require \texttt{w4\_replayed\_injected\_verbatim=1} for verbatim persistence; transformed carriers require an auditable semantic link. The legacy \texttt{retrieved\_contaminated} field only tests whether the final index contains bias tokens and cannot satisfy this condition. For historical unpaired profiles, S0 and clean accuracy remain descriptive references.
 
 \section{Results}
 \FloatBarrier
@@ -265,6 +265,10 @@ S4 Note      & 22.9 & 10.4 & 52.9 &  0.0 \\
 \bottomrule
 \end{tabular*}
 \end{table}
+
+Bootstrap intervals expose the uncertainty behind these raw rates. The 95\% intervals for Qwen3 TAME are [62.5, 87.5] and [50.0, 77.1] on synthetic S1/S3, and [62.5, 79.8] and [33.7, 51.0] on real S1/S3. Component ablations reinforce the lack of a stable Qwen3 defense effect: full TAME, no triage, no decoupling, and no cache separation yield 75.0/72.9/70.8/72.9\% on synthetic S1 and 62.5/58.3/66.7/66.7\% on S3. Qwen2.5 is flatter still, with every component condition between 75.0\% and 77.1\%. These intervals and ablations characterize finite-sample variability rather than causal method effects.
+
+The write-path trace nevertheless verifies that TAME changes stored representations. Across the four Qwen3 attacked slices, each sequence averages 3.077--3.250 accepted writes and 0.750--0.923 downgraded writes; hard blocks never exceed 0.010 per sequence and no rollback fires. The architecture therefore exposes and records admission decisions even in slices where end-task DASR does not improve.
 
 \subsection{Carrier Fidelity Determines Persistence}
 
@@ -413,6 +417,30 @@ GLM-5.2 & Synthetic & 8.3 & 16.7 & 27.1 & 14.6 \\
 \end{tabular*}
 \end{table*}
 
+\subsection{Raw DASR Hides Opposite Failure Directions}
+
+Table~\ref{tab:direction-split} explains why similar aggregate DASR does not imply similar vulnerability. GPT-5.4 over-triggers on benign activity: its real FP DASR is 84.6--100\% and BMR is 92.3--96.2\%. Qwen2.5 exhibits the opposite boundary, with 97.4\% FN DASR, 97.1--98.1\% MTR, and negligible benign false alarms. Qwen3 remains FN-dominated but develops a real S1 false-positive component. This split explains why a memory-write defense can reduce attack-manufactured false alarms on one slice while leaving an under-triggering detector largely unchanged.
+
+\begin{table*}[t]
+\caption{Direction-specific failure profile on attacked real-log streams (\%). FN/FP DASR are W4 attack-direction errors; BMR and MTR aggregate the corresponding benign and malicious decisions across W1--W4. Values are descriptive legacy rates.}
+\label{tab:direction-split}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.06}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrrr@{}}
+\toprule
+Model & Carrier & FN DASR & FP DASR & BMR (FP) & MTR (FN) \\
+\midrule
+GPT-5.4 & S1 History & 69.2 & 100.0 & 96.2 & 71.2 \\
+        & S3 Retrieval & 82.1 & 84.6 & 92.3 & 82.7 \\
+Qwen2.5-7B & S1 History & 97.4 & 42.3 & 0.0 & 97.1 \\
+            & S3 Retrieval & 97.4 & 0.0 & 0.0 & 98.1 \\
+Qwen3-14B & S1 History & 85.9 & 69.2 & 3.8 & 89.4 \\
+          & S3 Retrieval & 82.1 & 0.0 & 0.0 & 86.5 \\
+\bottomrule
+\end{tabular*}
+\end{table*}
+
 \subsection{Evidence Boundary}
 
 No frozen run in this draft passes the full PDCR gate. Qwen3 attacked/control keys are complete and unique, but legacy synthetic generation was not byte-frozen and the S3 flag records index contamination rather than exact W4 replay. Real Qwen3 uses different attacked and clean draws. Historical all-carrier, distance, variant, task, baseline, and auxiliary-model screens therefore establish descriptive breadth rather than causal effect size. Component ablations also show no stable Qwen3 ordering: removing triage, decoupling, or cache separation changes synthetic raw DASR by at most 4.2 points. Together, the frozen evidence identifies persistent carrier exposure, surface and task interactions, detector ceilings, and evaluation failure modes; the corrected paired protocol is the gate for causal attack and mitigation rates.
@@ -433,7 +461,7 @@ Qwen3 demonstrates why a raw directional error is not an attack-success rate. Sy
 
 \subsection{Detector Capability Is Part of the Security Boundary}
 
-A memory defense can remove only errors caused by memory. Qwen2.5 makes the boundary visible: its clean W4 accuracy is at most 25.0\% in the reported S1/S3 slices, while raw attacked error remains 73.1--83.7\%; TAME is correspondingly mixed. Qwen3 also frequently answers \texttt{suspicious} or \texttt{benign} on payload-free malicious triggers, especially on the synthetic slice. In this regime, a high false-negative DASR says little about prompt influence because the detector already fails on the trigger. Capability gating is therefore part of the security protocol: report clean trigger accuracy, separate false-negative and false-positive objectives, and compute a paired rate before interpreting mitigation.
+A memory defense can remove only errors caused by memory. Qwen2.5 makes the boundary visible: its clean W4 accuracy is at most 25.0\% in the reported S1/S3 slices, while raw attacked error remains 73.1--83.7\%; among malicious real clean triggers, its miss floor is 94.9--100\%. Qwen3 lowers that real malicious-trigger miss floor to 66.7--69.2\%, but still frequently answers \texttt{suspicious} or \texttt{benign}. The clean and attacked real slices use different draws, so these floors diagnose capability rather than estimate contamination. In this regime, a high false-negative DASR says little about prompt influence because the detector already fails on the trigger. Capability gating is therefore part of the security protocol: report clean trigger accuracy, separate false-negative and false-positive objectives, and compute a paired rate before interpreting mitigation.
 
 \section{Related Work}
 

@@ -597,8 +597,8 @@
     },
     {
       "path": "experiments/validate_artifact.py",
-      "bytes": 17097,
-      "sha256": "b2be0a8bf233f8a0f30364dc3566be0d462c6db0ef3c23dd1e57c6cc4b478880"
+      "bytes": 18976,
+      "sha256": "65d58d77eaab12ab681f268e5be7eada8764b14f16becc8df6516298ff752c36"
     },
     {
       "path": "figures/benchmark_example_source.json",
@@ -782,13 +782,13 @@
     },
     {
       "path": "paper/state_contamination_usenix2027_draft.pdf",
-      "bytes": 380381,
-      "sha256": "3feb66f144a6bf61f9f0a62cb7b6b274f4aa70c5d722d992674e01a5a54282a3"
+      "bytes": 383106,
+      "sha256": "22211a9252337c25ac81c14f12a9386d3facf4cba1f41db41ed823eb0dae9544"
     },
     {
       "path": "paper/state_contamination_usenix2027_draft.tex",
-      "bytes": 53236,
-      "sha256": "a4a5ac425ae7b6f3005a679464517042d8cb9d73c4217254c3f087104580d742"
+      "bytes": 56283,
+      "sha256": "84dba47a2653d3f199f911b31e89ed1df5e358b7f85bef797245864ff343b4bd"
     },
     {
       "path": "paper/usenix.sty",
@@ -982,8 +982,8 @@
     },
     {
       "path": "results/PAPER_EVIDENCE_REPORT.md",
-      "bytes": 6777,
-      "sha256": "135173357247d4fc90a67e2c9193483c7bf27fc707a6bde0f71736d700d77768"
+      "bytes": 7298,
+      "sha256": "37023d8e4d7427fbd10e9f537a1be2f44c1df5de74440f14075dc0210652666b"
     },
     {
       "path": "results/quarantined/guard_real8_items.jsonl",

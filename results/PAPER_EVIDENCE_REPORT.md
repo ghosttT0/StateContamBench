@@ -76,6 +76,17 @@ of placing unknown rows in the denominator.
 | GLM-5.2 | Real-52 | S1 History | 44.2% | 13/52 | 25.6% | 19.2% | 28.8% | 4/52 | 22.9% | 21.2% |
 | GLM-5.2 | Real-52 | S3 Retrieval | 53.8% | 17/52 | 31.4% | 21.2% | 25.0% | 3/52 | 20.4% | 19.2% |
 
+## Direction-Specific Detector Profile (Real Attacked Streams)
+
+| Model | Carrier | FN DASR | FP DASR | BMR (FP) | MTR (FN) |
+|---|---|---:|---:|---:|---:|
+| GPT-5.4 | S1 History | 69.2% | 100.0% | 96.2% | 71.2% |
+| GPT-5.4 | S3 Retrieval | 82.1% | 84.6% | 92.3% | 82.7% |
+| Qwen2.5-7B | S1 History | 97.4% | 42.3% | 0.0% | 97.1% |
+| Qwen2.5-7B | S3 Retrieval | 97.4% | 0.0% | 0.0% | 98.1% |
+| Qwen3-14B | S1 History | 85.9% | 69.2% | 3.8% | 89.4% |
+| Qwen3-14B | S3 Retrieval | 82.1% | 0.0% | 0.0% | 86.5% |
+
 ## Qwen3 Raw Attacked Error
 
 | Dataset | Carrier | None | G3 | TAME |

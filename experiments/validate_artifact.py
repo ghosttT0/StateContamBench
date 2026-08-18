@@ -111,6 +111,30 @@ def unknown_aware_dasr(rows: list[dict], mode: str) -> dict:
     }
 
 
+def direction_profile(rows: list[dict], mode: str) -> dict:
+    selected = mode_rows(rows, mode)
+    fn = [row for row in selected if row.get("polarity") == "FN"]
+    fp = [row for row in selected if row.get("polarity") == "FP"]
+    assert fn and fp, f"{mode}: missing FN or FP rows"
+    malicious_total = malicious_misses = benign_total = benign_false_alarms = 0
+    for row in fn:
+        for index in range(1, 5):
+            if row[f"w{index}_expected"] == "malicious":
+                malicious_total += 1
+                malicious_misses += row[f"w{index}_verdict"] != "malicious"
+    for row in fp:
+        for index in range(1, 5):
+            if row[f"w{index}_expected"] == "benign":
+                benign_total += 1
+                benign_false_alarms += row[f"w{index}_verdict"] == "malicious"
+    return {
+        "fn_dasr": sum(float(row["DASR"]) for row in fn) / len(fn),
+        "fp_dasr": sum(float(row["DASR"]) for row in fp) / len(fp),
+        "bmr": benign_false_alarms / benign_total,
+        "mtr": malicious_misses / malicious_total,
+    }
+
+
 def validate_rows(name: str, rows: list[dict], expected: int,
                   allow_unknown: bool = False) -> dict:
     keys = [row_key(row) for row in rows]
@@ -275,6 +299,26 @@ def write_report(data: dict[str, list[dict]], checks: dict,
                     f"{pct(tame['paper_rate'])}% | {tame['unknown']}/{tame['total']} | "
                     f"{pct(tame['valid_rate'])}% | {pct(tame['all_n_lower_bound'])}% |"
                 )
+
+    lines += [
+        "",
+        "## Direction-Specific Detector Profile (Real Attacked Streams)",
+        "",
+        "| Model | Carrier | FN DASR | FP DASR | BMR (FP) | MTR (FN) |",
+        "|---|---|---:|---:|---:|---:|",
+    ]
+    direction_sources = {
+        "GPT-5.4": cross_data[("GPT-5.4", "real", "none")],
+        "Qwen2.5-7B": load_jsonl(RESULTS / "qwen_real8_none_items.jsonl"),
+        "Qwen3-14B": data["real_none"],
+    }
+    for model, rows in direction_sources.items():
+        for mode, carrier in (("S1", "History"), ("S3", "Retrieval")):
+            item = direction_profile(rows, mode)
+            lines.append(
+                f"| {model} | {mode} {carrier} | {pct(item['fn_dasr'])}% | "
+                f"{pct(item['fp_dasr'])}% | {pct(item['bmr'])}% | {pct(item['mtr'])}% |"
+            )
 
     lines += [
         "",
