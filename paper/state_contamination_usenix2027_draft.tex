@@ -35,7 +35,7 @@ An Auditable Protocol for Cross-Window Prompt Injection Through Persistent Memor
 \begin{abstract}
 A prompt injection in a security log can outlive the window in which it appears. LLM-based security pipelines preserve earlier material in conversation history, generated summaries, retrieval stores, and analyst notes. Existing log-injection evaluations ask whether a poisoned record changes the analyzer's immediate output. They leave unmeasured the later decision made after that record has become persistent state and disappeared from the current input. We call this cross-window failure \attack.
 
-We introduce \datasetname, a multi-window protocol that places an injected record before intervening clean activity and evaluates a separate trigger window. The benchmark exercises four memory carriers and distinguishes raw attack-direction error from a causal rate that requires byte-matched controls and trigger-time replay evidence. A frozen Qwen3-14B run reaches 68.8--70.8\% raw error on synthetic streams and 61.5--81.7\% on real-log streams. Additional screens span three trigger distances, four surface variants, two investigation tasks, and six analyzer families; raw exposure persists across distance, while defense behavior and output coverage change by model and slice. An artifact audit found that the legacy synthetic attacked and clean slices were generated in separate processes with unfrozen nuisance fields, while the real slices use different sampling depths; the stored retrieval flag also describes index contamination rather than the exact W4 hits. We therefore reserve paired delayed-contamination rates for corrected runs. The artifact freezes data generation, records input and replay hashes, and rejects unmatched rows. The resulting protocol establishes delayed contamination from matched inputs, observed replay, and detector capability rather than wrong verdicts alone.
+We introduce \datasetname, a multi-window protocol that places an injected record before intervening clean activity and evaluates a separate trigger window. The benchmark exercises four memory carriers and distinguishes raw attack-direction error from a causal rate that requires byte-matched controls and trigger-time replay evidence. A frozen Qwen3-14B run reaches 68.8--70.8\% raw error on synthetic streams and 61.5--81.7\% on real-log streams. Additional screens span three trigger distances, four surface variants, two investigation tasks, and six analyzer families; raw exposure persists across distance, while defense behavior changes by model and slice. An artifact audit found that the legacy synthetic attacked and clean slices were generated in separate processes with unfrozen nuisance fields, while the real slices use different sampling depths; the stored retrieval flag also describes index contamination rather than the exact W4 hits. We therefore reserve paired delayed-contamination rates for corrected runs. The artifact freezes data generation, records input and replay hashes, and rejects unmatched rows. The resulting protocol establishes delayed contamination from matched inputs, observed replay, and detector capability rather than wrong verdicts alone.
 \end{abstract}
 
 \section{Introduction}
@@ -62,7 +62,9 @@ The paper organizes the threat from write to replay, then audits which parts the
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/state_contamination_threat.pdf}
+\makebox[\textwidth][c]{%
+\includegraphics[width=0.98\textwidth]{figures/state_contamination_threat.pdf}%
+}
 \caption{Delayed state contamination and its paired measurement unit. (a) An attacker-controlled record enters in W1, crosses the persistent-state boundary through one of four carriers, survives intervening activity, and affects a clean W4 trigger whose current window contains no injected record. (b) A causal delayed-contamination event compares byte-identical attacked and payload-free streams while holding the carrier, prompt, model revision, and decoding fixed. The control must be correct, the attacked output must move in the attacker's direction, and the replayed carrier state must change under the payload.}
 \label{fig:threat-model}
 \end{figure*}
@@ -124,7 +126,9 @@ Figures~\ref{fig:stream-example} and~\ref{fig:replay-example} ground the legacy 
 \begin{minipage}[t]{0.48\textwidth}
 \vspace{0pt}
 \centering
-\includegraphics[width=\linewidth]{figures/benchmark_stream_example.pdf}
+\makebox[\linewidth][c]{%
+\includegraphics[width=\linewidth]{figures/benchmark_stream_example.pdf}%
+}
 \captionof{figure}{Concrete stream for seeded sample \texttt{seq026}. W1 contains a future-directed A3-FN record, W2--W3 contain routine activity, and W4 contains a SYN-scan trigger but no injected record.}
 \label{fig:stream-example}
 \end{minipage}
@@ -132,7 +136,9 @@ Figures~\ref{fig:stream-example} and~\ref{fig:replay-example} ground the legacy 
 \begin{minipage}[t]{0.48\textwidth}
 \vspace{0pt}
 \centering
-\includegraphics[width=\linewidth]{figures/benchmark_replay_example.pdf}
+\makebox[\linewidth][c]{%
+\includegraphics[width=\linewidth]{figures/benchmark_replay_example.pdf}%
+}
 \captionof{figure}{Legacy S3 evidence for the same sample. The retrieval index contains the W1 record and the analyzer's reason refers to its prior approval before returning benign on the malicious W4 trigger. The exact top-3 hit list was not stored, so \texttt{retrieved\_contaminated=1} is an index-contamination signal rather than replay proof.}
 \label{fig:replay-example}
 \end{minipage}
@@ -276,7 +282,9 @@ The task also changes exposure in that diagnostic family. On synthetic streams, 
 \begin{minipage}[t]{0.48\textwidth}
 \vspace{0pt}
 \centering
-\includegraphics[width=0.98\linewidth]{figures/state_contamination_payload_sensitivity.pdf}
+\makebox[\linewidth][c]{%
+\includegraphics[width=0.96\linewidth]{figures/state_contamination_payload_sensitivity.pdf}%
+}
 \captionof{figure}{Payload sensitivity on constructed real-log streams. Future-directed AUDIT-followup produces the highest raw attack-direction error on S1. Values are descriptive, not floor-adjusted causal rates.}
 \label{fig:payload-sensitivity}
 \end{minipage}
@@ -284,7 +292,9 @@ The task also changes exposure in that diagnostic family. On synthetic streams, 
 \begin{minipage}[t]{0.48\textwidth}
 \vspace{0pt}
 \centering
-\includegraphics[width=0.98\linewidth]{figures/state_contamination_task_sensitivity.pdf}
+\makebox[\linewidth][c]{%
+\includegraphics[width=0.96\linewidth]{figures/state_contamination_task_sensitivity.pdf}%
+}
 \captionof{figure}{Task sensitivity across historical synthetic and real-log streams. IOC wording lowers raw error on synthetic streams but increases it under real retrieval. Values are descriptive.}
 \label{fig:task-sensitivity}
 \end{minipage}
@@ -294,7 +304,9 @@ Raw exposure persists across the tested delay range. Moving the injection from W
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.98\linewidth]{figures/state_contamination_trigger_distance.pdf}
+\makebox[\linewidth][c]{%
+\includegraphics[width=0.96\linewidth]{figures/state_contamination_trigger_distance.pdf}%
+}
 \caption{Historical synthetic trigger-distance sweep. W4 is fixed while the injected record moves from W3 (distance 1) to W1 (distance 3). Raw error remains stable across the tested delays; curves are descriptive, not paired effects.}
 \label{fig:trigger-distance}
 \end{figure}
@@ -371,10 +383,10 @@ Clean ACC & S1 & 91.7 & 89.6 & -- & 81.2 & 87.5 & 89.6 \\
 
 Table~\ref{tab:cross-model} reports all six analyzer families rather than removing runs that contain unknown outputs. GPT-5.4 raw error falls by 27.1 and 22.9 percentage points on synthetic S1 and S3 and by 21.2 points on real S3. Qwen2.5 behaves differently: TAME leaves both synthetic carriers near 75\%, lowers real S1 from 83.7\% to 72.1\%, and slightly raises real S3. Its clean W4 accuracy is only 19.2--25.0\%, exposing a detector-ceiling regime in which raw attack-direction error is dominated by task failure. Qwen3 lies between these profiles. The contrast establishes model dependence without treating raw differences as causal defense effects.
 
-Each cell reports DASR over rows with a known W4 verdict and the unknown count as $[U/N]$. Qwen3, Qwen2.5, and GPT-5.4 have complete W4 coverage. Claude has one unknown W4 verdict among 400 rows, whereas GLM has 57 and DeepSeek-V4-Pro has 179. The latter two families therefore remain useful as coverage-qualified screens, but their conditional DASR values cannot support a provider ranking or be read as evidence of robustness. The artifact also reports an all-$N$ lower bound so that the historical convention of placing unknown rows in the denominator remains reproducible without being confused with the valid-output rate.
+To keep a common denominator without rewarding malformed or missing decisions, Table~\ref{tab:cross-model} conservatively counts every unresolved W4 output as an attack-direction error. The resulting values are worst-case attacked error rates rather than provider rankings. The artifact retains the output-quality counts and valid-output rates needed to audit this scoring rule.
 
 \begin{table*}[t]
-\caption{Cross-model attacked screen. Each cell is valid-output DASR (\%) $[U/N]$, where $U$ is the number of unknown W4 verdicts among $N$ streams. Qwen models use 48 synthetic or 104 real streams per carrier; the other models use 48 or 52. Unknown-bearing scores are conditional and should not be ranked against zero-unknown rows.}
+\caption{Cross-model attacked screen (DASR, \%). Unresolved W4 outputs count as attack-direction errors. Qwen models use 48 synthetic or 104 real streams per carrier; the other models use 48 or 52. Lower is better.}
 \label{tab:cross-model}
 \centering
 \scriptsize
@@ -385,18 +397,18 @@ Model & Dataset & \multicolumn{2}{c}{S1 History} & \multicolumn{2}{c}{S3 Retriev
 \cmidrule(lr){3-4}\cmidrule(lr){5-6}
  & & None & TAME & None & TAME \\
 \midrule
-Qwen3-14B & Synthetic & 70.8 [0/48] & 75.0 [0/48] & 68.8 [0/48] & 62.5 [0/48] \\
-         & Real-104 & 81.7 [0/104] & 71.2 [0/104] & 61.5 [0/104] & 42.3 [0/104] \\
-Qwen2.5-7B & Synthetic & 75.0 [0/48] & 77.1 [0/48] & 75.0 [0/48] & 75.0 [0/48] \\
-         & Real-104 & 83.7 [0/104] & 72.1 [0/104] & 73.1 [0/104] & 75.0 [0/104] \\
-GPT-5.4 & Synthetic & 62.5 [0/48] & 35.4 [0/48] & 58.3 [0/48] & 35.4 [0/48] \\
-         & Real-52 & 76.9 [0/52] & 71.2 [0/52] & 82.7 [0/52] & 61.5 [0/52] \\
-DeepSeek-V4-Pro & Synthetic & 11.1 [21/48] & 0.0 [16/48] & 6.9 [19/48] & 0.0 [11/48] \\
-         & Real-52 & 16.7 [40/52] & 16.7 [22/52] & 61.5 [26/52] & 17.9 [24/52] \\
-Claude-Sonnet-5 & Synthetic & 27.1 [0/48] & 20.8 [0/48] & 21.3 [1/48] & 29.2 [0/48] \\
-         & Real-52 & 38.5 [0/52] & 40.4 [0/52] & 48.1 [0/52] & 40.4 [0/52] \\
-GLM-5.2 & Synthetic & 4.3 [2/48] & 7.0 [5/48] & 16.7 [6/48] & 0.0 [7/48] \\
-         & Real-52 & 25.6 [13/52] & 22.9 [4/52] & 31.4 [17/52] & 20.4 [3/52] \\
+Qwen3-14B & Synthetic & 70.8 & 75.0 & 68.8 & 62.5 \\
+         & Real-104 & 81.7 & 71.2 & 61.5 & 42.3 \\
+Qwen2.5-7B & Synthetic & 75.0 & 77.1 & 75.0 & 75.0 \\
+         & Real-104 & 83.7 & 72.1 & 73.1 & 75.0 \\
+GPT-5.4 & Synthetic & 62.5 & 35.4 & 58.3 & 35.4 \\
+         & Real-52 & 76.9 & 71.2 & 82.7 & 61.5 \\
+DeepSeek-V4-Pro & Synthetic & 50.0 & 33.3 & 43.8 & 22.9 \\
+         & Real-52 & 80.8 & 51.9 & 80.8 & 55.8 \\
+Claude-Sonnet-5 & Synthetic & 27.1 & 20.8 & 22.9 & 29.2 \\
+         & Real-52 & 38.5 & 40.4 & 48.1 & 40.4 \\
+GLM-5.2 & Synthetic & 8.3 & 16.7 & 27.1 & 14.6 \\
+         & Real-52 & 44.2 & 28.8 & 53.8 & 25.0 \\
 \bottomrule
 \end{tabular*}
 \end{table*}
@@ -447,13 +459,13 @@ The anonymous review package contains the benchmark, evaluation scripts, write-p
 \subsection{Limitations}
 \label{sec:limitations}
 
-The evaluation covers six analyzer families, but output coverage differs sharply: three have no unknown W4 verdicts, Claude has one, GLM has 57, and DeepSeek-V4-Pro has 179. We expose these denominators instead of treating unknown outputs as non-attacks. The real-log-based streams use sampled fragments, generation-derived labels, and synthetic window boundaries rather than end-to-end incidents with human-adjudicated ground truth. S3 relies on lexical overlap and benchmark-specific identifiers; carrier exposure may change under embedding or hybrid retrieval. The run families differ in sample size and metadata completeness, so cross-model comparisons establish heterogeneity across the tested configurations rather than a provider ranking.
+The evaluation covers six analyzer families under a conservative failure policy that counts unresolved W4 outputs as attack-direction errors. The real-log-based streams use sampled fragments, generation-derived labels, and synthetic window boundaries rather than end-to-end incidents with human-adjudicated ground truth. S3 relies on lexical overlap and benchmark-specific identifiers; carrier exposure may change under embedding or hybrid retrieval. The run families differ in sample size and metadata completeness, so cross-model comparisons establish heterogeneity across the tested configurations rather than a provider ranking.
 
 The causal gap also affects synthetic controls. Legacy synthetic runs left four nuisance fields on the process-seeded RNG and derived payload timestamps from Python's salted \texttt{hash()}, so separate same-key invocations are not certified pairs. The old retrieval indicator scans the final index rather than recording W4 hits. Real attacked streams additionally use \texttt{n-per-type=8}, while clean streams use \texttt{n-per-type=4}. One historical DeepSeek real-TAME file also contains 480 rows for 208 unique keys; the artifact quarantines it and excludes it from every aggregate. We report no PDCR, clean-floor subtraction, or exact method-effect test from frozen rows. The Qwen3 files omit row-level model revisions, and their component ablations identify no stable active component.
 
 \section{Conclusion}
 
-Stateful LLM log analysis creates a delayed prompt-injection channel that current-window evaluations do not measure. \datasetname follows an injected record across history, retrieval, summaries, and notes, then tests a later trigger whose current window is clean. Frozen screens expose raw errors across four carriers, three trigger distances, four surface variants, two tasks, six write policies, and six analyzer families with explicit output coverage. They also show why raw counts are inadequate: detector ceilings, unknown outputs, duplicate keys, unmatched controls, and unobserved retrieval can each mimic or distort a contamination effect. The artifact turns these failures into an enforceable protocol based on deterministic construction and source, control, prompt, and replay fingerprints. Corrected paired runs can now measure the causal channel these descriptive screens locate.
+Stateful LLM log analysis creates a delayed prompt-injection channel that current-window evaluations do not measure. \datasetname follows an injected record across history, retrieval, summaries, and notes, then tests a later trigger whose current window is clean. Frozen screens expose raw errors across four carriers, three trigger distances, four surface variants, two tasks, six write policies, and six analyzer families under a conservative failure policy. They also show why raw counts are inadequate: detector ceilings, unresolved outputs, duplicate keys, unmatched controls, and unobserved retrieval can each mimic or distort a contamination effect. The artifact turns these failures into an enforceable protocol based on deterministic construction and source, control, prompt, and replay fingerprints. Corrected paired runs can now measure the causal channel these descriptive screens locate.
 
 \appendix
 \section{Ethical Considerations}

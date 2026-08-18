@@ -9,9 +9,10 @@ frozen result rows used by the paper and its supplemental screens, a Qwen3-14B
 execution recipe, source data for the paper figures, and integrity checks that
 recompute the reported values.
 
-The cross-model screen retains all six analyzer families. For runs with unknown
-W4 outputs, it reports valid-output DASR together with `U/N` and an all-N lower
-bound; unknown responses are never silently counted as non-attacks.
+The cross-model screen retains all six analyzer families. The paper uses a
+conservative score that treats unknown W4 outputs as attack-direction errors.
+The audit additionally reports valid-output DASR, `U/N`, and an all-N lower
+bound so that the scoring rule remains fully reproducible.
 
 ## Important Evidence Status
 

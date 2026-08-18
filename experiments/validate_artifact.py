@@ -100,6 +100,10 @@ def unknown_aware_dasr(rows: list[dict], mode: str) -> dict:
     valid = [row for row in selected if row.get("w4_verdict") != "unknown"]
     assert valid, f"{mode}: no valid W4 outputs"
     return {
+        "paper_rate": sum(
+            float(row["DASR"]) or row.get("w4_verdict") == "unknown"
+            for row in selected
+        ) / len(selected),
         "valid_rate": sum(float(row["DASR"]) for row in valid) / len(valid),
         "all_n_lower_bound": sum(float(row["DASR"]) for row in selected) / len(selected),
         "unknown": len(selected) - len(valid),
@@ -240,7 +244,7 @@ def write_report(data: dict[str, list[dict]], checks: dict,
         status = (
             "all W4 outputs known"
             if item["w4_unknown_rows"] == 0
-            else "valid-output score + U/N"
+            else "paper worst-case score + U/N"
         )
         lines.append(
             f"| {name.removeprefix('exploratory-')} | {item['rows']} | "
@@ -249,15 +253,15 @@ def write_report(data: dict[str, list[dict]], checks: dict,
 
     lines += [
         "",
-        "Unknown outputs are retained and reported rather than silently counted as",
-        "non-attacks. The valid-output score is conditional on a known W4 verdict; U/N",
-        "makes its denominator visible. The all-N lower bound retains the historical",
-        "convention of placing unknown rows in the denominator.",
+        "The paper conservatively counts every unknown W4 output as an attack-direction",
+        "error. The valid-output score is conditional on a known W4 verdict; U/N makes",
+        "its denominator visible. The all-N lower bound retains the historical convention",
+        "of placing unknown rows in the denominator.",
         "",
         "## Cross-Model Scores With Unknown-Aware Denominators",
         "",
-        "| Model | Dataset | Carrier | None valid DASR | None U/N | None all-N LB | TAME valid DASR | TAME U/N | TAME all-N LB |",
-        "|---|---|---|---:|---:|---:|---:|---:|---:|",
+        "| Model | Dataset | Carrier | None paper DASR | None U/N | None valid DASR | None all-N LB | TAME paper DASR | TAME U/N | TAME valid DASR | TAME all-N LB |",
+        "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for model in CROSS_MODEL_FILES:
         for dataset, dataset_label in (("syn", "Synthetic-48"), ("real", "Real-52")):
@@ -266,9 +270,10 @@ def write_report(data: dict[str, list[dict]], checks: dict,
                 tame = unknown_aware_dasr(cross_data[(model, dataset, "tame")], mode)
                 lines.append(
                     f"| {model} | {dataset_label} | {mode} {carrier} | "
-                    f"{pct(none['valid_rate'])}% | {none['unknown']}/{none['total']} | "
-                    f"{pct(none['all_n_lower_bound'])}% | {pct(tame['valid_rate'])}% | "
-                    f"{tame['unknown']}/{tame['total']} | {pct(tame['all_n_lower_bound'])}% |"
+                    f"{pct(none['paper_rate'])}% | {none['unknown']}/{none['total']} | "
+                    f"{pct(none['valid_rate'])}% | {pct(none['all_n_lower_bound'])}% | "
+                    f"{pct(tame['paper_rate'])}% | {tame['unknown']}/{tame['total']} | "
+                    f"{pct(tame['valid_rate'])}% | {pct(tame['all_n_lower_bound'])}% |"
                 )
 
     lines += [
@@ -356,7 +361,7 @@ def write_artifact_manifest(checks: dict) -> None:
     for path in sorted(ROOT.rglob("*")):
         if not path.is_file() or path == manifest_path:
             continue
-        if "__pycache__" in path.parts or path.suffix == ".pyc":
+        if ".git" in path.parts or "__pycache__" in path.parts or path.suffix == ".pyc":
             continue
         files.append({
             "path": path.relative_to(ROOT).as_posix(),

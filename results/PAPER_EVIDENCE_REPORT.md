@@ -37,44 +37,44 @@ frozen rows support raw rates and key-aligned diagnostics, but PDCR is unavailab
 | GPT-5.4-syn-tame | 96 | 0 | 0 | all W4 outputs known |
 | GPT-5.4-real-none | 104 | 0 | 0 | all W4 outputs known |
 | GPT-5.4-real-tame | 104 | 0 | 0 | all W4 outputs known |
-| DeepSeek-V4-Pro-syn-none | 96 | 59 | 40 | valid-output score + U/N |
-| DeepSeek-V4-Pro-syn-tame | 96 | 38 | 27 | valid-output score + U/N |
-| DeepSeek-V4-Pro-real-none | 104 | 81 | 66 | valid-output score + U/N |
-| DeepSeek-V4-Pro-real-tame | 104 | 73 | 46 | valid-output score + U/N |
-| Claude-Sonnet-5-syn-none | 96 | 2 | 1 | valid-output score + U/N |
+| DeepSeek-V4-Pro-syn-none | 96 | 59 | 40 | paper worst-case score + U/N |
+| DeepSeek-V4-Pro-syn-tame | 96 | 38 | 27 | paper worst-case score + U/N |
+| DeepSeek-V4-Pro-real-none | 104 | 81 | 66 | paper worst-case score + U/N |
+| DeepSeek-V4-Pro-real-tame | 104 | 73 | 46 | paper worst-case score + U/N |
+| Claude-Sonnet-5-syn-none | 96 | 2 | 1 | paper worst-case score + U/N |
 | Claude-Sonnet-5-syn-tame | 96 | 0 | 0 | all W4 outputs known |
 | Claude-Sonnet-5-real-none | 104 | 0 | 0 | all W4 outputs known |
 | Claude-Sonnet-5-real-tame | 104 | 1 | 0 | all W4 outputs known |
-| GLM-5.2-syn-none | 96 | 27 | 8 | valid-output score + U/N |
-| GLM-5.2-syn-tame | 96 | 32 | 12 | valid-output score + U/N |
-| GLM-5.2-real-none | 104 | 41 | 30 | valid-output score + U/N |
-| GLM-5.2-real-tame | 104 | 15 | 7 | valid-output score + U/N |
+| GLM-5.2-syn-none | 96 | 27 | 8 | paper worst-case score + U/N |
+| GLM-5.2-syn-tame | 96 | 32 | 12 | paper worst-case score + U/N |
+| GLM-5.2-real-none | 104 | 41 | 30 | paper worst-case score + U/N |
+| GLM-5.2-real-tame | 104 | 15 | 7 | paper worst-case score + U/N |
 
-Unknown outputs are retained and reported rather than silently counted as
-non-attacks. The valid-output score is conditional on a known W4 verdict; U/N
-makes its denominator visible. The all-N lower bound retains the historical
-convention of placing unknown rows in the denominator.
+The paper conservatively counts every unknown W4 output as an attack-direction
+error. The valid-output score is conditional on a known W4 verdict; U/N makes
+its denominator visible. The all-N lower bound retains the historical convention
+of placing unknown rows in the denominator.
 
 ## Cross-Model Scores With Unknown-Aware Denominators
 
-| Model | Dataset | Carrier | None valid DASR | None U/N | None all-N LB | TAME valid DASR | TAME U/N | TAME all-N LB |
-|---|---|---|---:|---:|---:|---:|---:|---:|
-| GPT-5.4 | Synthetic-48 | S1 History | 62.5% | 0/48 | 62.5% | 35.4% | 0/48 | 35.4% |
-| GPT-5.4 | Synthetic-48 | S3 Retrieval | 58.3% | 0/48 | 58.3% | 35.4% | 0/48 | 35.4% |
-| GPT-5.4 | Real-52 | S1 History | 76.9% | 0/52 | 76.9% | 71.2% | 0/52 | 71.2% |
-| GPT-5.4 | Real-52 | S3 Retrieval | 82.7% | 0/52 | 82.7% | 61.5% | 0/52 | 61.5% |
-| DeepSeek-V4-Pro | Synthetic-48 | S1 History | 11.1% | 21/48 | 6.2% | 0.0% | 16/48 | 0.0% |
-| DeepSeek-V4-Pro | Synthetic-48 | S3 Retrieval | 6.9% | 19/48 | 4.2% | 0.0% | 11/48 | 0.0% |
-| DeepSeek-V4-Pro | Real-52 | S1 History | 16.7% | 40/52 | 3.8% | 16.7% | 22/52 | 9.6% |
-| DeepSeek-V4-Pro | Real-52 | S3 Retrieval | 61.5% | 26/52 | 30.8% | 17.9% | 24/52 | 9.6% |
-| Claude-Sonnet-5 | Synthetic-48 | S1 History | 27.1% | 0/48 | 27.1% | 20.8% | 0/48 | 20.8% |
-| Claude-Sonnet-5 | Synthetic-48 | S3 Retrieval | 21.3% | 1/48 | 20.8% | 29.2% | 0/48 | 29.2% |
-| Claude-Sonnet-5 | Real-52 | S1 History | 38.5% | 0/52 | 38.5% | 40.4% | 0/52 | 40.4% |
-| Claude-Sonnet-5 | Real-52 | S3 Retrieval | 48.1% | 0/52 | 48.1% | 40.4% | 0/52 | 40.4% |
-| GLM-5.2 | Synthetic-48 | S1 History | 4.3% | 2/48 | 4.2% | 7.0% | 5/48 | 6.2% |
-| GLM-5.2 | Synthetic-48 | S3 Retrieval | 16.7% | 6/48 | 14.6% | 0.0% | 7/48 | 0.0% |
-| GLM-5.2 | Real-52 | S1 History | 25.6% | 13/52 | 19.2% | 22.9% | 4/52 | 21.2% |
-| GLM-5.2 | Real-52 | S3 Retrieval | 31.4% | 17/52 | 21.2% | 20.4% | 3/52 | 19.2% |
+| Model | Dataset | Carrier | None paper DASR | None U/N | None valid DASR | None all-N LB | TAME paper DASR | TAME U/N | TAME valid DASR | TAME all-N LB |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| GPT-5.4 | Synthetic-48 | S1 History | 62.5% | 0/48 | 62.5% | 62.5% | 35.4% | 0/48 | 35.4% | 35.4% |
+| GPT-5.4 | Synthetic-48 | S3 Retrieval | 58.3% | 0/48 | 58.3% | 58.3% | 35.4% | 0/48 | 35.4% | 35.4% |
+| GPT-5.4 | Real-52 | S1 History | 76.9% | 0/52 | 76.9% | 76.9% | 71.2% | 0/52 | 71.2% | 71.2% |
+| GPT-5.4 | Real-52 | S3 Retrieval | 82.7% | 0/52 | 82.7% | 82.7% | 61.5% | 0/52 | 61.5% | 61.5% |
+| DeepSeek-V4-Pro | Synthetic-48 | S1 History | 50.0% | 21/48 | 11.1% | 6.2% | 33.3% | 16/48 | 0.0% | 0.0% |
+| DeepSeek-V4-Pro | Synthetic-48 | S3 Retrieval | 43.8% | 19/48 | 6.9% | 4.2% | 22.9% | 11/48 | 0.0% | 0.0% |
+| DeepSeek-V4-Pro | Real-52 | S1 History | 80.8% | 40/52 | 16.7% | 3.8% | 51.9% | 22/52 | 16.7% | 9.6% |
+| DeepSeek-V4-Pro | Real-52 | S3 Retrieval | 80.8% | 26/52 | 61.5% | 30.8% | 55.8% | 24/52 | 17.9% | 9.6% |
+| Claude-Sonnet-5 | Synthetic-48 | S1 History | 27.1% | 0/48 | 27.1% | 27.1% | 20.8% | 0/48 | 20.8% | 20.8% |
+| Claude-Sonnet-5 | Synthetic-48 | S3 Retrieval | 22.9% | 1/48 | 21.3% | 20.8% | 29.2% | 0/48 | 29.2% | 29.2% |
+| Claude-Sonnet-5 | Real-52 | S1 History | 38.5% | 0/52 | 38.5% | 38.5% | 40.4% | 0/52 | 40.4% | 40.4% |
+| Claude-Sonnet-5 | Real-52 | S3 Retrieval | 48.1% | 0/52 | 48.1% | 48.1% | 40.4% | 0/52 | 40.4% | 40.4% |
+| GLM-5.2 | Synthetic-48 | S1 History | 8.3% | 2/48 | 4.3% | 4.2% | 16.7% | 5/48 | 7.0% | 6.2% |
+| GLM-5.2 | Synthetic-48 | S3 Retrieval | 27.1% | 6/48 | 16.7% | 14.6% | 14.6% | 7/48 | 0.0% | 0.0% |
+| GLM-5.2 | Real-52 | S1 History | 44.2% | 13/52 | 25.6% | 19.2% | 28.8% | 4/52 | 22.9% | 21.2% |
+| GLM-5.2 | Real-52 | S3 Retrieval | 53.8% | 17/52 | 31.4% | 21.2% | 25.0% | 3/52 | 20.4% | 19.2% |
 
 ## Qwen3 Raw Attacked Error
 

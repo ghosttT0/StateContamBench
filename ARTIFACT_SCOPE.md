@@ -8,6 +8,8 @@
 - Qwen2.5 None/G3/TAME, clean-capability, and component-ablation screens.
 - Six-family cross-model attacked screens, including unknown-aware denominators
   for Claude-Sonnet-5, GLM-5.2, and DeepSeek-V4-Pro.
+- Conservative paper scores that count unresolved W4 outputs as
+  attack-direction errors.
 - Historical all-carrier, payload-sensitivity, task-sensitivity,
   trigger-distance, surface-variant, write-path, and cross-model screens.
 - Every value regenerated in `PAPER_EVIDENCE_REPORT.md` and

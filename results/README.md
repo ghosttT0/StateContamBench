@@ -26,8 +26,8 @@ contain 52 rows per carrier and are not paired controls.
   clean-capability, and TAME component screens
 - `mechanism_*.json`: carrier mechanism summaries
 
-Unknown-bearing cross-model files are scored on known W4 outputs and report
-`U/N` beside every score; the generated evidence report also gives the
+The paper conservatively counts unknown W4 outputs as attack-direction errors.
+The generated evidence report also gives valid-output DASR, `U/N`, and the
 historical all-N lower bound. These files are retained only for the descriptive
 claims identified in the paper or supplemental evidence report.
 `RESULT_INDEX.md` maps every run family to that role.

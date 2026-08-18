@@ -333,8 +333,8 @@ def write_index() -> None:
         "",
         "The four complete DeepSeek-V4-Pro `cleanrun` files are bundled. Partial,",
         "NUL-corrupted, and duplicate early attempts are not evidence and are",
-        "intentionally excluded. Unknown-bearing families are reported with valid-output",
-        "DASR, W4 U/N, and an all-N lower bound rather than silently scored as safe.",
+        "intentionally excluded. The paper counts unknown W4 outputs as attack-direction",
+        "errors; the audit also reports valid-output DASR, W4 U/N, and an all-N lower bound.",
         "",
     ]
     (RESULTS / "RESULT_INDEX.md").write_text("\n".join(lines), encoding="utf-8")
